@@ -1,11 +1,8 @@
 package org.example;
 
-import javax.security.auth.callback.TextInputCallback;
 import java.util.ArrayList;
-import java.util.regex.Pattern;
-import java.util.stream.Stream;
+import java.util.HashSet;
 
-import static java.lang.System.exit;
 
 public class Calculator {
     private ArrayList<String> expression;
@@ -16,19 +13,19 @@ public class Calculator {
 
     public float calculate() {
         try {
-            if(! isValid()) {
-                throw new RuntimeException("Invalid Expression: Contains invalid characters");
-            }
+            checkValidExpression();
             divide();
             product();
             sum();
             difference();
 
-            return Float.parseFloat(expression.getFirst());
+            float ans = Float.parseFloat(expression.getFirst());
+            System.out.println(ans);
+            return ans;
         } catch (Exception e){
             System.out.println(e.getMessage());
-            exit(0);
         }
+
         return 0f;
     }
 
@@ -89,11 +86,26 @@ public class Calculator {
         }
     }
 
-    private boolean isValid() {
-        for(String str: expression) {
-//            if (Pattern.matches("[^+\\-*/]", str)) {
-            if(! (str.matches("[^+\\-*/]") || str.matches("[0-9]"))) {
-                return false;
+    private boolean checkValidExpression() {
+        HashSet<Character> set = new HashSet<>();
+        set.add('+'); set.add('-');
+        set.add('/');set.add('*');
+
+        if(expression.size()>1 && ! expression.getFirst().matches("[0-9]+")) {
+            throw new RuntimeException("Error: Operator detected at start");
+        }
+
+        for (int i=1;i<expression.size();i++) {
+            if(expression.get(i).matches("[0-9]+")){
+                if (expression.get(i-1).matches("[0-9]+")) {
+                    throw new RuntimeException("Error: Two consecutive numbers without operator detected");
+                }
+            } else if (set.contains(expression.get(i).charAt(0))) {
+                if (set.contains(expression.get(i-1).charAt(0))) {
+                    throw new RuntimeException("Error: Two consecutive operators detected");
+                }
+            } else {
+                throw new RuntimeException("Invalid Expression: Contains invalid characters");
             }
         }
         return true;
