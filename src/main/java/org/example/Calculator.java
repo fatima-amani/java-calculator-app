@@ -1,6 +1,7 @@
 package org.example;
 
 import java.util.ArrayList;
+import java.util.stream.Stream;
 
 public class Calculator {
     private ArrayList<String> expression;
@@ -10,51 +11,68 @@ public class Calculator {
     }
 
     public float calculate() {
-
         divide();
         product();
         sum();
         difference();
+
         return Float.parseFloat(expression.getFirst());
     }
 
     private void sum() {
-        while(expression.size()>1 && expression.contains("+")) {
-            int index = expression.indexOf("+");
-            float curr = Float.parseFloat(expression.get(index-1)) + Float.parseFloat(expression.get((index+1)));
-            expression.set(index, curr+"");
-            expression.remove(index-1);
-            expression.remove((index));
+        try {
+            while(expression.size()>1 && expression.contains("+")) {
+                int index = expression.indexOf("+");
+                float curr = Float.parseFloat(expression.get(index-1)) + Float.parseFloat(expression.get((index+1)));
+                expression.set(index, curr+"");
+                expression.remove(index-1);
+                expression.remove((index));
+            }
+        } catch (Exception e) {
+            System.out.println("Exception in Sum: "+e.getMessage());
         }
+
     }
 
     private void difference() {
-        while(expression.size()>1 && expression.contains("-")) {
-            int index = expression.indexOf("-");
-            float curr = Float.parseFloat(expression.get(index-1)) - Float.parseFloat(expression.get((index+1)));
-            expression.set(index, curr+"");
-            expression.remove(index-1);
-            expression.remove((index));
+        try {
+            while(expression.size()>1 && expression.contains("-")) {
+                int index = expression.indexOf("-");
+                float curr = Float.parseFloat(expression.get(index-1)) - Float.parseFloat(expression.get((index+1)));
+                expression.set(index, curr+"");
+                expression.remove(index-1);
+                expression.remove((index));
+            }
+        } catch (Exception e) {
+            System.out.println("Exception in Difference: "+e.getMessage());
         }
     }
 
     private void product() {
-        while(expression.size()>1 && expression.contains("*")) {
-            int index = expression.indexOf("*");
-            float curr = Float.parseFloat(expression.get(index-1)) * Float.parseFloat(expression.get((index+1)));
-            expression.set(index, curr+"");
-            expression.remove(index-1);
-            expression.remove((index));
+        try {
+            while(expression.size()>1 && expression.contains("*")) {
+                int index = expression.indexOf("*");
+                float curr = Float.parseFloat(expression.get(index-1)) * Float.parseFloat(expression.get((index+1)));
+                expression.set(index, curr+"");
+                expression.remove(index-1);
+                expression.remove((index));
+            }
+        } catch (Exception e) {
+            System.out.println("Exception while Product: "+e.getMessage());
         }
     }
 
     private void divide() {
-        while(expression.size()>1 && expression.contains("/")) {
-            int index = expression.indexOf("/");
-            float curr = Float.parseFloat(expression.get(index-1)) / Float.parseFloat(expression.get((index+1)));
-            expression.set(index, curr+"");
-            expression.remove(index-1);
-            expression.remove((index));
+        try {
+            while(expression.size()>1 && expression.contains("/")) {
+                int index = expression.indexOf("/");
+                float curr = Float.parseFloat(expression.get(index-1)) / Float.parseFloat(expression.get((index+1)));
+                expression.set(index, curr+"");
+                expression.remove(index-1);
+                expression.remove((index));
+            }
+        } catch (Exception e) {
+            System.out.println("Exception while Divding: "+e.getMessage());
         }
     }
 
