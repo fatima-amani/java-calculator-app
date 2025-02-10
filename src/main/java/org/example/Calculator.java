@@ -1,7 +1,11 @@
 package org.example;
 
+import javax.security.auth.callback.TextInputCallback;
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
+
+import static java.lang.System.exit;
 
 public class Calculator {
     private ArrayList<String> expression;
@@ -11,12 +15,21 @@ public class Calculator {
     }
 
     public float calculate() {
-        divide();
-        product();
-        sum();
-        difference();
+        try {
+            if(! isValid()) {
+                throw new RuntimeException("Invalid Expression: Contains invalid characters");
+            }
+            divide();
+            product();
+            sum();
+            difference();
 
-        return Float.parseFloat(expression.getFirst());
+            return Float.parseFloat(expression.getFirst());
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+            exit(0);
+        }
+        return 0f;
     }
 
     private void sum() {
@@ -74,6 +87,16 @@ public class Calculator {
         } catch (Exception e) {
             System.out.println("Exception while Divding: "+e.getMessage());
         }
+    }
+
+    private boolean isValid() {
+        for(String str: expression) {
+//            if (Pattern.matches("[^+\\-*/]", str)) {
+            if(! (str.matches("[^+\\-*/]") || str.matches("[0-9]"))) {
+                return false;
+            }
+        }
+        return true;
     }
 
 }
